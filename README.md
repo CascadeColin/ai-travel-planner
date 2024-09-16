@@ -41,7 +41,7 @@ A planned business or leisure travel that is generated via OpenAPI per Options s
 * Browse Trips if the user wants to confirm it was added
 * Edit or cancel the Trip if plans change
 
-### User Stories
+### User Stories - See 'TASKS.md' for detailed implementation
 
 #### Create Config and set a Preset
 
