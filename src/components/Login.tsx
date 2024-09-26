@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import { AuthResponse } from "../interfaces";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,13 +12,12 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
-    // TODO: Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
+
     const response = await fetch("http://localhost:8080/authenticate", {
-      // mode: "same-origin",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,14 +30,10 @@ export default function Login() {
 
     // This code executes if the request is successful
     if (response.status === 200) {
-      interface AuthResponse {
-        jwt_token: string;
-      }
-
       const { jwt_token }: AuthResponse =
         (await response.json()) as AuthResponse;
-      console.log(jwt_token);
       auth.login(jwt_token);
+
       navigate("/");
     } else if (response.status === 403) {
       setErrors(["Login failed."]);

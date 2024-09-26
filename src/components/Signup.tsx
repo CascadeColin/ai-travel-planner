@@ -1,23 +1,50 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthResponse } from "../interfaces";
 
 const Signup = () => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    // Handle sign-up logic here
+    // TODO: Handle sign-up logic here
     console.log("Name:", name);
-    console.log("Email:", email);
+    console.log("Email:", username);
     console.log("Password:", password);
+
+    const response = await fetch("http://localhost:8080/create_account", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        name: name
+      }),
+    })
+
+    if (response.status === 200) {
+      const {jwt_token}: AuthResponse = (await response.json()) as AuthResponse;
+
+      
+    }
   };
+
+//      THIS FORMAT
+//   {
+//     "username": "newuser@fakeemail.net",
+//     "password": "abcdefg123456",
+//     "name": "Ralph Williams"
+//    }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -55,9 +82,9 @@ const Signup = () => {
             <input
               type="email"
               id="email"
-              value={email}
+              value={username}
               onChange={(e) => {
-                setEmail(e.target.value);
+                setUsername(e.target.value);
               }}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               placeholder="Enter your email"

@@ -18,7 +18,7 @@ export default function Nav() {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
         <NavLink to="/">
-          <div className="text-white text-2xl font-bold">Travel Planner</div>
+          <div className="text-white text-2xl font-bold">Travel Planner P@ssw0rd!</div>
         </NavLink>
 
         {/* Conditional Rendering for Auth Buttons */}
