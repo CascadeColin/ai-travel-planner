@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import OpenAI from "openai";
+import Nav from "./components/Nav";
 import * as data from "./data";
+import { Outlet } from "react-router-dom";
 
 function App() {
   console.log(data.mockData)
@@ -45,8 +47,11 @@ function App() {
 
   return (
     <>
-      <h1>AI Travel Planner</h1>
-      <p>OpenAI return message: {text}</p>
+      <Nav></Nav>
+      <main>
+        <Outlet />
+      </main>
+      <p>OpenAI return message: {data.mockData.choices[0].message.content}</p>
     </>
   );
 }
