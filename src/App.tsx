@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
 import OpenAI from "openai";
 import Nav from "./components/Nav";
-import * as data from "./data";
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import AuthContext from "./context/AuthContext";
+import { User, Auth } from "./interfaces";
 
 function App() {
-  console.log(data.mockData)
   const API_KEY: string = import.meta.env.VITE_OPENAI_KEY as string;
   const ORG_KEY: string = import.meta.env.VITE_ORGANIZATION_KEY as string;
   const openai = new OpenAI({
@@ -13,7 +14,34 @@ function App() {
     organization: ORG_KEY,
     dangerouslyAllowBrowser: true,
   });
-  const [text, setText] = useState("");
+  console.log(openai)  //TODO: remove after testing
+
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = (token: string) => {
+    const { sub: username } = jwtDecode(token);
+
+    const user: User = {
+      username,
+      token,
+    };
+
+    // TODO: remove debugging
+    console.log("User: " + JSON.stringify(user));
+
+    setUser(user);
+    return user;
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const auth: Auth = {
+    user: user ? { ...user } : null,
+    login,
+    logout,
+  };
 
   // TODO: Runs infinitely, test with mock data to get this working properly.
   // useEffect(() => {
@@ -46,13 +74,13 @@ function App() {
   // }, [openai.chat.completions, text]);
 
   return (
-    <>
+    <AuthContext.Provider value={auth}>
       <Nav></Nav>
       <main>
         <Outlet />
       </main>
-      <p>OpenAI return message: {data.mockData.choices[0].message.content}</p>
-    </>
+      {/* <p>OpenAI return message: {data.mockData.choices[0].message.content}</p> */}
+    </AuthContext.Provider>
   );
 }
 

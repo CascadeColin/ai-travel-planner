@@ -1,14 +1,45 @@
 import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const Login = () => {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: Handle login logic here
     console.log("Email:", email);
     console.log("Password:", password);
+    const response = await fetch("http://localhost:8080/authenticate", {
+      // mode: "same-origin",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+      }),
+    });
+
+    // This code executes if the request is successful
+    if (response.status === 200) {
+      interface AuthResponse {
+        jwt_token: string;
+      }
+
+      const { jwt_token }: AuthResponse =
+        (await response.json()) as AuthResponse;
+      console.log(jwt_token);
+      navigate("/");
+    } else if (response.status === 403) {
+      setErrors(["Login failed."]);
+    } else {
+      setErrors(["Unknown error."]);
+    }
   };
 
   return (
@@ -29,7 +60,9 @@ const Login = () => {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => { setEmail(e.target.value); }}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               placeholder="Enter your email"
               required
@@ -46,7 +79,9 @@ const Login = () => {
               type="password"
               id="password"
               value={password}
-              onChange={(e) => { setPassword(e.target.value); }}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               placeholder="Enter your password"
               required
@@ -61,13 +96,11 @@ const Login = () => {
         </form>
         <div className="mt-6 text-sm text-gray-600 text-center">
           Do not have an account?{" "}
-          <a href="#" className="text-blue-500 hover:underline">
-            Sign up
-          </a>
+          <NavLink to="/signup">
+            <p className="text-blue-500 hover:underline">Sign up</p>
+          </NavLink>
         </div>
       </div>
     </div>
   );
-};
-
-export default Login;
+}
