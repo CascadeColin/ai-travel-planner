@@ -1,10 +1,12 @@
 import OpenAI from "openai";
 import Nav from "./components/Nav";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import AuthContext from "./context/AuthContext";
 import { User, Auth } from "./interfaces";
+
+const LOCAL_STORAGE_TOKEN_KEY = "tripToken"
 
 function App() {
   const API_KEY: string = import.meta.env.VITE_OPENAI_KEY as string;
@@ -17,8 +19,19 @@ function App() {
   console.log(openai)  //TODO: remove after testing
 
   const [user, setUser] = useState<User | null>(null);
+  const [restoreLoginAttemptCompleted, setRestoreLoginAttemptCompleted] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+    if (token) {
+      login(token)
+    }
+    setRestoreLoginAttemptCompleted(true)
+  }, [])
 
   const login = (token: string) => {
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token)
+
     const { sub: username } = jwtDecode(token);
 
     const user: User = {
@@ -26,15 +39,13 @@ function App() {
       token,
     };
 
-    // TODO: remove debugging
-    console.log("User: " + JSON.stringify(user));
-
     setUser(user);
     return user;
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
   };
 
   const auth: Auth = {
@@ -42,6 +53,8 @@ function App() {
     login,
     logout,
   };
+
+  console.log(`App.tsx user state: ${user ? JSON.stringify(user) : 'null'}`)
 
   // TODO: Runs infinitely, test with mock data to get this working properly.
   // useEffect(() => {

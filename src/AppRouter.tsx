@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
 import App from "./App";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -8,6 +5,7 @@ import Config from "./components/Config";
 import Landing from "./components/Landing";
 import AllTrips from "./components/AllTrips";
 import Trip from "./components/Trip";
+import AddTrip from "./components/AddTrip";
 // add other components
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -19,6 +17,10 @@ export default function AppRouter() {
       path: "/",
       element: <App />,
       children: [
+        {
+          path: '/add-trip',
+          element: <AddTrip />
+        },
         {
           path: "/",
           element: <Landing />,

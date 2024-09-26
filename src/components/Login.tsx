@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
 
+  const auth = useContext(AuthContext);
+
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     // TODO: Handle login logic here
     console.log("Email:", email);
@@ -34,6 +37,7 @@ export default function Login() {
       const { jwt_token }: AuthResponse =
         (await response.json()) as AuthResponse;
       console.log(jwt_token);
+      auth.login(jwt_token);
       navigate("/");
     } else if (response.status === 403) {
       setErrors(["Login failed."]);

@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import React from "react";
+import AuthContext from "../context/AuthContext";
 
 export default function Nav() {
   const [activeButton, setActiveButton] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const auth = useContext(AuthContext);
 
   const handleButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -20,19 +23,39 @@ export default function Nav() {
 
         {/* Conditional Rendering for Auth Buttons */}
         <div className="flex space-x-4">
-          {isLoggedIn ? (
+          {auth.user ? (
             <>
-              <a href="/profile" className="text-gray-300 hover:text-white">
-                My Trips
-              </a>
-              <button
-                onClick={() => {
-                  handleButtonClick("logout");
-                }}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
-                Logout
-              </button>
+            <NavLink to="/my-trips">
+                <button
+                  onClick={() => {
+                    handleButtonClick("my-trips");
+                  }}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  My Trips
+                </button>
+              </NavLink>
+              <NavLink to="/add-trip">
+                <button
+                  onClick={() => {
+                    handleButtonClick("my-trips");
+                  }}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Plan a Trip
+                </button>
+              </NavLink>
+              <NavLink to="/">
+                <button
+                  onClick={() => {
+                    handleButtonClick("logout");
+                    auth.logout();
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Logout
+                </button>
+              </NavLink>
             </>
           ) : (
             <>
