@@ -18,14 +18,26 @@ export default function Nav() {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
         <NavLink to="/">
-          <div className="text-white text-2xl font-bold">Travel Planner P@ssw0rd!</div>
+          <div className="text-white text-2xl font-bold ">
+            Travel Planner P@ssw0rd!
+          </div>
         </NavLink>
 
         {/* Conditional Rendering for Auth Buttons */}
         <div className="flex space-x-4">
           {auth.user ? (
             <>
-            <NavLink to="/my-trips">
+              <NavLink to='/config'>
+                <button
+                  onClick={() => {
+                    handleButtonClick("config");
+                  }}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  My Preferences
+                </button>
+              </NavLink>
+              <NavLink to="/my-trips">
                 <button
                   onClick={() => {
                     handleButtonClick("my-trips");
@@ -69,7 +81,7 @@ export default function Nav() {
                   Login
                 </button>
               </NavLink>
-              <NavLink to="/signup">
+              {/* <NavLink to="/signup">
                 <button
                   onClick={() => {
                     handleButtonClick("signup");
@@ -78,7 +90,7 @@ export default function Nav() {
                 >
                   Sign Up
                 </button>
-              </NavLink>
+              </NavLink> */}
             </>
           )}
         </div>

@@ -6,6 +6,7 @@ import Landing from "./components/Landing";
 import AllTrips from "./components/AllTrips";
 import Trip from "./components/Trip";
 import AddTrip from "./components/AddTrip";
+import LoginLanding from "./components/LoginLanding";
 // add other components
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -17,6 +18,10 @@ export default function AppRouter() {
       path: "/",
       element: <App />,
       children: [
+        {
+          path: `/home/:loginId`,
+          element: <LoginLanding />
+        },
         {
           path: '/add-trip',
           element: <AddTrip />
@@ -34,7 +39,7 @@ export default function AppRouter() {
           element: <Signup />,
         },
         {
-          path: "/config",
+          path: `/config/`,
           element: <Config />,
         },
         {

@@ -1,81 +1,126 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Config() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [traveler, setTraveler] = useState("");
+  const [cost, setCost] = useState("");
+  const [transportation, setTransportation] = useState("");
 
-  const handleSaveChanges = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async function () {
+      try {
+        const res = await fetch("http://localhost:8080/config/1");
+        if (res.ok) {
+          interface ConfigData {
+            travelerType: string;
+            costPref: string;
+            transportationPref: string;
+          }
+
+          const data: ConfigData = await res.json() as ConfigData;
+          console.log(data);
+          setTraveler(data.travelerType);
+          setCost(data.costPref);
+          setTransportation(data.transportationPref);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    void fetchUser();
+  }, []);
+
+  const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Handle the logic to save changes here
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Current Password:", currentPassword);
-    console.log("New Password:", newPassword);
+    console.log(traveler, cost, transportation);
+    const response = await fetch("http://localhost:8080/config/1", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        configId: 1,
+        travelerType: traveler,
+        costPref: cost,
+        transportationPref: transportation
+      }),
+    });
+
+    if (response.status === 204) {
+      navigate('/home/1')
+    } else {
+      console.log(response.statusText)
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">User Settings</h2>
+        <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">
+          User Settings
+        </h2>
         <form onSubmit={handleSaveChanges}>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Type of travel
             </label>
             <input
               type="text"
-              id="name"
-              value={name}
-              onChange={(e) => { setName(e.target.value); }}
+              id="traveler"
+              value={traveler}
+              onChange={(e) => {
+                setTraveler(e.target.value);
+              }}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Update your name"
+              placeholder="Update your traveler type"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Cost preference
             </label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value); }}
+              type="text"
+              id="cost"
+              value={cost}
+              onChange={(e) => {
+                setCost(e.target.value);
+              }}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Update your email"
+              placeholder="Update cost preference"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              Current Password
+            <label
+              htmlFor="currentPassword"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Transportation preference
             </label>
             <input
-              type="password"
-              id="currentPassword"
-              value={currentPassword}
-              onChange={(e) => { setCurrentPassword(e.target.value); }}
+              type="text"
+              id="transportation"
+              value={transportation}
+              onChange={(e) => {
+                setTransportation(e.target.value);
+              }}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Enter current password"
+              placeholder="Enter transportation preference"
               required
-            />
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              New Password
-            </label>
-            <input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => { setNewPassword(e.target.value); }}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Enter new password"
             />
           </div>
 
@@ -86,17 +131,7 @@ export default function Config() {
             Save Changes
           </button>
         </form>
-
-        <div className="mt-8">
-          <h3 className="text-lg font-semibold text-gray-800">Delete Account</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Warning: Once you delete your account, there is no going back. Please be certain.
-          </p>
-          <button className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-200">
-            Delete Account
-          </button>
-        </div>
       </div>
     </div>
   );
-};
+}

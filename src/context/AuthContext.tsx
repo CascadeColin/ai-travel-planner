@@ -4,8 +4,7 @@ import { Auth, User } from "../interfaces";
 const defaultAuth: Auth = {
   user: null,
   login: (token: string): User => {
-    // Implement the login function to return a User object
-    return { username: "", token }; // Example implementation
+    return { username: "", token, loginId: "", configId: "" };
   },
   logout: () => {},
 };

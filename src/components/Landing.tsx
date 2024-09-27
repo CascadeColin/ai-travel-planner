@@ -18,11 +18,11 @@ export default function Landing () {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
-          Welcome
+        <h2 className="text-3xl font-bold mb-4 text-gray-800 text-center">
+          Welcome back to Travel Planner
         </h2>
         <p className="text-gray-600 text-center mb-8">
-          Please choose an option to continue.
+          Please log in to continue.
         </p>
         <div className="flex flex-col space-y-4">
           <NavLink to="/login">
@@ -36,7 +36,7 @@ export default function Landing () {
             </button>
           </NavLink>
 
-          <NavLink to="/signup">
+          {/* <NavLink to="/signup">
             <button
               onClick={() => {
                 handleButtonClick("signup");
@@ -45,7 +45,7 @@ export default function Landing () {
             >
               Sign Up
             </button>
-          </NavLink>
+          </NavLink> */}
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthResponse } from "../interfaces";
 
+// NOTE: not implemented, needs backend work to function properly
 const Signup = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -31,10 +32,15 @@ const Signup = () => {
       }),
     })
 
-    if (response.status === 200) {
-      const {jwt_token}: AuthResponse = (await response.json()) as AuthResponse;
+    const data = await response.json()
+    console.log(data)
 
-      
+    if (response.status === 201) {
+      // Handle successful signup
+      console.log("Signup successful:", data);
+    } else {
+      // Handle signup error
+      console.error("Signup failed:", data);
     }
   };
 

@@ -30,11 +30,10 @@ export default function Login() {
 
     // This code executes if the request is successful
     if (response.status === 200) {
-      const { jwt_token }: AuthResponse =
-        (await response.json()) as AuthResponse;
-      auth.login(jwt_token);
-
-      navigate("/");
+      const data: AuthResponse = await response.json() as AuthResponse;
+      auth.login(data.jwt_token);
+      console.log(data)
+      navigate(`/home/${data.login_id}`);  // it does exist though?  IDE issue maybe?
     } else if (response.status === 403) {
       setErrors(["Login failed."]);
     } else {

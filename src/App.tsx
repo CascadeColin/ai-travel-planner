@@ -16,7 +16,6 @@ function App() {
     organization: ORG_KEY,
     dangerouslyAllowBrowser: true,
   });
-  console.log(openai)  //TODO: remove after testing
 
   const [user, setUser] = useState<User | null>(null);
   const [restoreLoginAttemptCompleted, setRestoreLoginAttemptCompleted] = useState(false)
@@ -53,8 +52,6 @@ function App() {
     login,
     logout,
   };
-
-  console.log(`App.tsx user state: ${user ? JSON.stringify(user) : 'null'}`)
 
   // TODO: Runs infinitely, test with mock data to get this working properly.
   // useEffect(() => {
