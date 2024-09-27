@@ -23,3 +23,11 @@ export interface AuthResponse {
   jwt_token: string;
   config_id: string;
 }
+
+export interface Vacation {
+  destination: string;
+  tripDetails: string;
+  startDate: string;
+  endDate: string;
+  plannerId: number;
+}

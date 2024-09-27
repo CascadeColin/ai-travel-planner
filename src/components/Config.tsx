@@ -21,7 +21,6 @@ export default function Config() {
           }
 
           const data: ConfigData = await res.json() as ConfigData;
-          console.log(data);
           setTraveler(data.travelerType);
           setCost(data.costPref);
           setTransportation(data.transportationPref);

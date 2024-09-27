@@ -19,7 +19,7 @@ export default function Nav() {
         {/* Logo or Brand Name */}
         <NavLink to="/">
           <div className="text-white text-2xl font-bold ">
-            Travel Planner P@ssw0rd!
+            Travel Planner
           </div>
         </NavLink>
 
